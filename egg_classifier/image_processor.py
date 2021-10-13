@@ -7,3 +7,8 @@ class ImageSplitter:
 
     def split_image(self, image: Image.Image) -> list[list[Image.Image]]:
         return None
+
+
+class ImageDrawer:
+    def __init__(self) -> None:
+        pass

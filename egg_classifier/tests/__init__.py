@@ -1,1 +1,0 @@
-from .image_splitter_tests import ImageSplitterTests
