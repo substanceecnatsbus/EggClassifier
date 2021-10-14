@@ -1,4 +1,5 @@
 # Egg Classifier
+![Build Status](https://github.com/substanceecnatsbus/EggClassifier/actions/workflows/python-app.yml/badge.svg)
 
 ## Installation
 ```
