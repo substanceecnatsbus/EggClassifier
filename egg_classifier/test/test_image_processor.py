@@ -21,8 +21,8 @@ class ImageSplitterTests(unittest.TestCase):
             output_images: list[list[Image.Image]] = image_splitter.split_image(
                 input_image
             )
-            for row_counter, row_counter in enumerate(output_images):
-                for column_counter, column in enumerate(row_counter):
+            for row_counter, row in enumerate(output_images):
+                for column_counter, column in enumerate(row):
                     column.save(
                         f"{OUTPUT_IMAGES_DIRECTORY}/test-{row_counter}-{column_counter}.jpg"
                     )
