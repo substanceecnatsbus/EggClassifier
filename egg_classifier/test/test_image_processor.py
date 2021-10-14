@@ -1,6 +1,5 @@
 import unittest
-from pathlib import Path
-from PIL import Image, ImageChops
+from PIL import Image
 from egg_classifier.image_processor import ImageSplitter
 
 NUMBER_OF_ROWS: int = 5
