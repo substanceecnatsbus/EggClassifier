@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 from PIL import Image, ImageChops
 from egg_classifier.image_processor import ImageSplitter
 
@@ -29,6 +30,8 @@ class ImageSplitterTests(unittest.TestCase):
             actual_number_of_output_columns: int = len(row)
             self.assertEqual(actual_number_of_output_columns, expected_number_of_output_columns, "Invalid Number of Columns in Output")
 
+        path = Path(OUTPUT_IMAGES_DIRECTORY)
+        path.mkdir(exist_ok=True)
         for row_counter, row in enumerate(output_images):
             for column_counter, column in enumerate(row):
                 column.save(
