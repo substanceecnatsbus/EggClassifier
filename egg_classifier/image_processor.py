@@ -1,4 +1,4 @@
-from PIL import Image
+import numpy as np
 
 
 class ImageSplitter:
@@ -6,29 +6,28 @@ class ImageSplitter:
         self.number_of_rows = number_of_rows
         self.number_of_columns = number_of_columns
 
-    def split_image(self, image_path: str) -> list[list[Image.Image]]:
-        with Image.open(image_path) as input_image:
-            image_width: int = input_image.width
-            image_height: int = input_image.height
-            split_width: float = image_width / self.number_of_columns
-            splilt_height: float = image_width / self.number_of_rows
+    def split_image(self, image: np.ndarray) -> np.ndarray:
+        image_dimensions = image.shape
+        image_width = image_dimensions[1]
+        image_height = image_dimensions[0]
+        crop_width = int(image_width / self.number_of_columns)
+        crop_height = int(image_height / self.number_of_rows)
 
-            result: list[list[Image.Image]] = []
-            y: float = 0
-            while y < image_height:
-                row: list[Image.Image] = []
-                x: float = 0
-                while x < image_width:
-                    right: float = x + splilt_height
-                    bottom: float = y + split_width
-                    box = (x, y, right, bottom)
-                    sub_image: Image.Image = input_image.crop(box)
-                    row.append(sub_image)
-                    x += split_width
-                y += splilt_height
-                result.append(row)
+        images = []
+        y_start = 0
+        while y_start < image_height:
+            y_end = y_start + crop_height
+            x_start = 0
+            while x_start < image_width:
+                x_end = x_start + crop_width
+                cropped_image = image[y_start:y_end, x_start:x_end]
+                cropped_image = cropped_image.tolist()
+                images.append(cropped_image)
+                x_start += crop_width
+            y_start += crop_height
 
-            return result
+        result = np.array(images)
+        return result
 
 
 class ImageDrawer:
