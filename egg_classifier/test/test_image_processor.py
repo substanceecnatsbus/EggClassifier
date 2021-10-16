@@ -1,4 +1,3 @@
-from typing import Tuple
 import unittest
 from PIL import Image
 import numpy as np
@@ -32,7 +31,9 @@ class ImageSplitterTests(unittest.TestCase):
             actual_dimensions = output_images.shape
 
             # number of images should match
-            expected_number_of_images = image_splitter.number_of_rows * image_splitter.number_of_columns
+            expected_number_of_images = (
+                image_splitter.number_of_rows * image_splitter.number_of_columns
+            )
             self.assertEqual(
                 actual_dimensions[0],
                 expected_number_of_images,
