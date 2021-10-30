@@ -3,8 +3,10 @@ from PIL import Image
 import numpy as np
 from egg_classifier.image_processor import ImageSplitter
 
-NUMBER_OF_ROWS: int = 5
-NUMBER_OF_COLUMNS: int = 5
+NUMBER_OF_ROWS: int = 4
+NUMBER_OF_COLUMNS: int = 6
+OFFSET_X_PERCENT: int = -10
+OFFSET_Y_PERCENT: int = 0
 INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-image.jpg"
 
 
@@ -18,7 +20,9 @@ class ImageSplitterTests(unittest.TestCase):
         input_image: Image.Image = None
         try:
             # get ImageSplitter.split_image output
-            image_splitter = ImageSplitter(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS)
+            image_splitter = ImageSplitter(
+                NUMBER_OF_ROWS, NUMBER_OF_COLUMNS, OFFSET_X_PERCENT, OFFSET_Y_PERCENT
+            )
             input_image = Image.open(INPUT_IMAGE_PATH)
             input_image_ndarray = np.array(input_image, dtype=np.uint8)
             output_images = image_splitter.split_image(input_image_ndarray)
@@ -29,6 +33,8 @@ class ImageSplitterTests(unittest.TestCase):
             crop_width = int(input_image_width / image_splitter.number_of_columns)
             crop_height = int(input_image_height / image_splitter.number_of_rows)
             actual_dimensions = output_images.shape
+            offset_x = crop_width * image_splitter.offset_x_percent // 100
+            offset_y = crop_height * image_splitter.offset_y_percent // 100
 
             # number of images should match
             expected_number_of_images = (
@@ -43,12 +49,14 @@ class ImageSplitterTests(unittest.TestCase):
             # images should match
             image_counter = 0
             y_start = 0
-            while y_start < input_image_height:
+            while y_start < crop_height * image_splitter.number_of_rows:
                 y_end = y_start + crop_height
                 x_start = 0
-                while x_start < input_image_width:
+                while x_start < crop_width * image_splitter.number_of_columns:
                     x_end = x_start + crop_width
-                    expected_image = input_image_ndarray[y_start:y_end, x_start:x_end]
+                    expected_image = input_image_ndarray[
+                        y_start : y_end + offset_y, x_start : x_end + offset_x
+                    ]
                     actual_image = output_images[image_counter]
                     self.assertTrue(
                         np.allclose(actual_image, expected_image),
