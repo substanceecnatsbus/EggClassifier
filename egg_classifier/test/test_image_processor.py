@@ -1,7 +1,7 @@
 import unittest
 from PIL import Image
 import numpy as np
-from egg_classifier.image_processor import ImageSplitter
+from egg_classifier.image_processor import ImageSplitter, flip_vertical, flip_horizontal
 
 NUMBER_OF_ROWS: int = 4
 NUMBER_OF_COLUMNS: int = 6
@@ -70,6 +70,13 @@ class ImageSplitterTests(unittest.TestCase):
         finally:
             if input_image is not None:
                 input_image.close()
+
+class ImageAugmentationTests(unittest.TestCase):
+    def test_flip_vertical(self):
+        pass
+
+    def test_flip_horizontal(self):
+        pass
 
 
 if __name__ == "__main__":
