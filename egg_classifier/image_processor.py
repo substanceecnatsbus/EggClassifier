@@ -56,4 +56,5 @@ def flip_vertical(input_image: np.ndarray) -> np.ndarray:
 
 
 def flip_horizontal(input_image: np.ndarray):
-    return input_image
+    result = np.flip(input_image, axis=1)
+    return result
