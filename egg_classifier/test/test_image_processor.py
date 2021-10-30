@@ -99,8 +99,30 @@ class ImageAugmentationTests(unittest.TestCase):
             if input_image is not None:
                 input_image.close()
 
-    def test_flip_horizontal(self):
-        pass
+    def test_flip_horizontal(self) -> None:
+        input_image: Image.Image = None
+        try:
+            input_image = Image.open(IMAGE_AUGMENTATION_INPUT_IMAGE_PATH)
+            input_image_ndarray = np.array(input_image, np.uint8)
+            input_image_shape = input_image_ndarray.shape
+            actual_image = flip_horizontal(input_image_ndarray)
+            actual_image_shape = actual_image.shape
+
+            # shapes should match
+            self.assertEqual(
+                input_image_shape, actual_image_shape, "Invalid image shape."
+            )
+
+            # images should match
+            expected_image = np.flip(input_image_ndarray, axis=1)
+            self.assertTrue(
+                np.allclose(actual_image, expected_image), "Image does not match."
+            )
+        except Exception as error:
+            self.fail(error)
+        finally:
+            if input_image is not None:
+                input_image.close()
 
 
 if __name__ == "__main__":
