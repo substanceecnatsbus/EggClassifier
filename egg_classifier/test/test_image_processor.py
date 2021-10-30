@@ -1,13 +1,14 @@
 import unittest
 from PIL import Image
 import numpy as np
-from egg_classifier.image_processor import ImageSplitter
+from egg_classifier.image_processor import ImageSplitter, flip_vertical, flip_horizontal
 
 NUMBER_OF_ROWS: int = 4
 NUMBER_OF_COLUMNS: int = 6
 OFFSET_X_PERCENT: int = -10
 OFFSET_Y_PERCENT: int = 0
-INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-image.jpg"
+IMAGE_SPLITTER_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-eggs.jpg"
+IMAGE_AUGMENTATION_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-egg.jpg"
 
 
 class ImageSplitterTests(unittest.TestCase):
@@ -23,7 +24,7 @@ class ImageSplitterTests(unittest.TestCase):
             image_splitter = ImageSplitter(
                 NUMBER_OF_ROWS, NUMBER_OF_COLUMNS, OFFSET_X_PERCENT, OFFSET_Y_PERCENT
             )
-            input_image = Image.open(INPUT_IMAGE_PATH)
+            input_image = Image.open(IMAGE_SPLITTER_INPUT_IMAGE_PATH)
             input_image_ndarray = np.array(input_image, dtype=np.uint8)
             output_images = image_splitter.split_image(input_image_ndarray)
 
@@ -65,6 +66,58 @@ class ImageSplitterTests(unittest.TestCase):
                     x_start += crop_width
                     image_counter += 1
                 y_start += crop_height
+        except Exception as error:
+            self.fail(error)
+        finally:
+            if input_image is not None:
+                input_image.close()
+
+
+class ImageAugmentationTests(unittest.TestCase):
+    def test_flip_vertical(self) -> None:
+        input_image: Image.Image = None
+        try:
+            input_image = Image.open(IMAGE_AUGMENTATION_INPUT_IMAGE_PATH)
+            input_image_ndarray = np.array(input_image, np.uint8)
+            input_image_shape = input_image_ndarray.shape
+            actual_image = flip_vertical(input_image_ndarray)
+            actual_image_shape = actual_image.shape
+
+            # shapes should match
+            self.assertEqual(
+                input_image_shape, actual_image_shape, "Invalid image shape."
+            )
+
+            # images should match
+            expected_image = np.flip(input_image_ndarray, axis=0)
+            self.assertTrue(
+                np.allclose(actual_image, expected_image), "Image does not match."
+            )
+        except Exception as error:
+            self.fail(error)
+        finally:
+            if input_image is not None:
+                input_image.close()
+
+    def test_flip_horizontal(self) -> None:
+        input_image: Image.Image = None
+        try:
+            input_image = Image.open(IMAGE_AUGMENTATION_INPUT_IMAGE_PATH)
+            input_image_ndarray = np.array(input_image, np.uint8)
+            input_image_shape = input_image_ndarray.shape
+            actual_image = flip_horizontal(input_image_ndarray)
+            actual_image_shape = actual_image.shape
+
+            # shapes should match
+            self.assertEqual(
+                input_image_shape, actual_image_shape, "Invalid image shape."
+            )
+
+            # images should match
+            expected_image = np.flip(input_image_ndarray, axis=1)
+            self.assertTrue(
+                np.allclose(actual_image, expected_image), "Image does not match."
+            )
         except Exception as error:
             self.fail(error)
         finally:

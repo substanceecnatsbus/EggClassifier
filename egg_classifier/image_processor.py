@@ -50,6 +50,11 @@ class ImageSplitter:
         return result
 
 
-class ImageDrawer:
-    def __init__(self) -> None:
-        pass
+def flip_vertical(input_image: np.ndarray) -> np.ndarray:
+    result = np.flip(input_image, axis=0)
+    return result
+
+
+def flip_horizontal(input_image: np.ndarray):
+    result = np.flip(input_image, axis=1)
+    return result
