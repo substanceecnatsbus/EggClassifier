@@ -26,3 +26,4 @@ python -m pip install -r requirements.txt
 - [] Create Tests for classifier.Classifier.predict
 - [] Implement classifier.Classifier.predict
 - [x] Create image_augmentation.py
+- [x] Create image_split.py
