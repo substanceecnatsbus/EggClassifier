@@ -1,4 +1,4 @@
-import imp
+import numpy as np
 from typing import Tuple
 import tensorflow as tf
 from tensorflow import keras
@@ -8,8 +8,14 @@ class Classifier:
     def __init__(self) -> None:
         pass
 
+    def __load_model(self, model_path: str) -> tf.keras.Model:
+        pass
+
+    def predict(self, data: np.ndarray) -> list[str]:
+        pass
+
     @staticmethod
-    def train():
+    def train() -> None:
         pass
 
     @staticmethod

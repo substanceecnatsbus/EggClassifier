@@ -15,5 +15,13 @@ python -m pip install -r requirements.txt
 - [x] Implement ImageAugmentor
 - [] Create Tests for ImageDrawer
 - [] Implement ImageDrawer
-- [] Create Tests for classifier.Classifier.load_dataset
+- [x] Create Tests for classifier.Classifier.load_dataset
+- [x] Implement classifier.Classifier.load_dataset
 - [] Create Tests for classifier.Classifier.train
+- [] Implement classifier.Classifier.train
+- [] Create Tests for classifier.Classifier.__load_model
+- [] Implement classifier.Classifier.__load_model
+- [] Create Tests for classifier.Classifier.__init__
+- [] Implement classifier.Classifier.__init__
+- [] Create Tests for classifier.Classifier.predict
+- [] Implement classifier.Classifier.predict
