@@ -5,13 +5,15 @@ from egg_classifier.classifier import Classifier
 
 DATASET_PATH = "resources/test-dataset/test-data"
 IMAGE_SIZE = (128, 64)
+tf.autograph.set_verbosity(3)
 
 
 class ClassifierTests(unittest.TestCase):
     def test_load_dataset(self) -> None:
         train_dataset, test_dataset, actual_class_names = Classifier.load_dataset(
             DATASET_PATH, IMAGE_SIZE, batch_size=1)
-        expected_class_names = os.listdir(DATASET_PATH)
+        expected_class_names = sorted(os.listdir(DATASET_PATH))
+        actual_class_names = sorted(actual_class_names)
 
         # class names should match
         self.assertEqual(actual_class_names,
