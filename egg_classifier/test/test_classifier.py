@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 from egg_classifier.classifier import Classifier
 
-DATASET_PATH = "resources/dataset"
+DATASET_PATH = "resources/test-dataset/test-data"
 IMAGE_SIZE = (128, 64)
 
 
