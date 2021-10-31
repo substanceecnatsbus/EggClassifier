@@ -39,8 +39,8 @@ class ImageSplitter:
                         "The offset in the x-axis is going over the image width."
                     )
                 cropped_image = image[
-                    y_start : y_end + offset_y,
-                    x_start : x_end + offset_x,
+                    y_start: y_end + offset_y,
+                    x_start: x_end + offset_x,
                 ]
                 images.append(cropped_image)
                 x_start += crop_width

@@ -31,8 +31,10 @@ class ImageSplitterTests(unittest.TestCase):
             # get input image properties
             input_image_width = input_image.width
             input_image_height = input_image.height
-            crop_width = int(input_image_width / image_splitter.number_of_columns)
-            crop_height = int(input_image_height / image_splitter.number_of_rows)
+            crop_width = int(input_image_width /
+                             image_splitter.number_of_columns)
+            crop_height = int(input_image_height /
+                              image_splitter.number_of_rows)
             actual_dimensions = output_images.shape
             offset_x = crop_width * image_splitter.offset_x_percent // 100
             offset_y = crop_height * image_splitter.offset_y_percent // 100
@@ -56,7 +58,7 @@ class ImageSplitterTests(unittest.TestCase):
                 while x_start < crop_width * image_splitter.number_of_columns:
                     x_end = x_start + crop_width
                     expected_image = input_image_ndarray[
-                        y_start : y_end + offset_y, x_start : x_end + offset_x
+                        y_start: y_end + offset_y, x_start: x_end + offset_x
                     ]
                     actual_image = output_images[image_counter]
                     self.assertTrue(
@@ -91,7 +93,8 @@ class ImageAugmentationTests(unittest.TestCase):
             # images should match
             expected_image = np.flip(input_image_ndarray, axis=0)
             self.assertTrue(
-                np.allclose(actual_image, expected_image), "Image does not match."
+                np.allclose(
+                    actual_image, expected_image), "Image does not match."
             )
         except Exception as error:
             self.fail(error)
@@ -116,7 +119,8 @@ class ImageAugmentationTests(unittest.TestCase):
             # images should match
             expected_image = np.flip(input_image_ndarray, axis=1)
             self.assertTrue(
-                np.allclose(actual_image, expected_image), "Image does not match."
+                np.allclose(
+                    actual_image, expected_image), "Image does not match."
             )
         except Exception as error:
             self.fail(error)
