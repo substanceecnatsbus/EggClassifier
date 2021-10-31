@@ -25,3 +25,4 @@ python -m pip install -r requirements.txt
 - [] Implement classifier.Classifier.__init__
 - [] Create Tests for classifier.Classifier.predict
 - [] Implement classifier.Classifier.predict
+- [x] Create image_augmentation.py
