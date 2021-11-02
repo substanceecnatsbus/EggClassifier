@@ -1,10 +1,14 @@
 import unittest
 import os
+from PIL import Image
+import numpy as np
 import tensorflow as tf
 from egg_classifier.classifier import Classifier
 
 DATASET_PATH = "resources/test-dataset/test-data"
-IMAGE_SIZE = (128, 64)
+MODEL_PATH = "resources/test-dataset/test-model"
+IMAGE_SIZE = (128, 128)
+INPUT_SHAPE = (128, 128, 3)
 tf.autograph.set_verbosity(3)
 
 
@@ -32,6 +36,38 @@ class ClassifierTests(unittest.TestCase):
             test_dataset_number_of_images
         self.assertEqual(actual_dataset_number_of_images,
                          expected_number_of_images, "Number of images do not match.")
+
+    def test_train(self) -> None:
+        model, history = Classifier.train(
+            INPUT_SHAPE, number_of_epochs=1, dataset_path=DATASET_PATH, save_path=MODEL_PATH)
+
+        # input shapes should match
+        actual_input_shape = model.layers[0].output_shape
+        expected_input_shape = (None, INPUT_SHAPE[0], INPUT_SHAPE[1], 3)
+        self.assertEqual(*actual_input_shape,
+                         expected_input_shape, "Invalid input shape.")
+
+        # output shapes should match
+        actual_output_shape = model.layers[-1].output_shape
+        expected_output_shape = (None, 1)
+        self.assertEqual(actual_output_shape,
+                         expected_output_shape, "Invalid output shape.")
+
+    def test_load_model(self) -> None:
+        classifier = Classifier(MODEL_PATH)
+        model = classifier.get_model()
+
+        # input shapes should match
+        actual_input_shape = model.layers[0].output_shape
+        expected_input_shape = (None, INPUT_SHAPE[0], INPUT_SHAPE[1], 3)
+        self.assertEqual(*actual_input_shape,
+                         expected_input_shape, "Invalid input shape.")
+
+        # output shapes should match
+        actual_output_shape = model.layers[-1].output_shape
+        expected_output_shape = (None, 1)
+        self.assertEqual(actual_output_shape,
+                         expected_output_shape, "Invalid output shape.")
 
 
 if __name__ == "__main__":
