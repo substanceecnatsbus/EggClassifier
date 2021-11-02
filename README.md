@@ -18,11 +18,10 @@ python -m pip install .
 - [x] Create Tests for classifier.Classifier.load_dataset
 - [x] Implement classifier.Classifier.load_dataset
 - [x] Create Tests for classifier.Classifier.train
-- [] Implement classifier.Classifier.train
-- [] Create Tests for classifier.Classifier.__load_model
-- [] Implement classifier.Classifier.__load_model
-- [] Create Tests for classifier.Classifier.__init__
-- [] Implement classifier.Classifier.__init__
+- [x] Implement classifier.Classifier.train
+- [x] Create Tests for classifier.Classifier.__load_model
+- [x] Implement classifier.Classifier.__load_model
+- [x] Implement classifier.Classifier.__init__
 - [] Create Tests for classifier.Classifier.predict
 - [] Implement classifier.Classifier.predict
 - [x] Create image_augmentation.py
