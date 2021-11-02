@@ -6,11 +6,15 @@ tf.autograph.set_verbosity(3)
 
 
 class Classifier:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, model_path: str) -> None:
+        self.__load_model(model_path)
 
-    def __load_model(self, model_path: str) -> tf.keras.Model:
-        pass
+    def __load_model(self, model_path: str) -> None:
+        self.__model = tf.keras.models.load_model(
+            "resources/models/mobilenetv2")
+
+    def get_model(self) -> tf.keras.Model:
+        return self.__model
 
     def predict(self, data: np.ndarray) -> list[str]:
         pass
