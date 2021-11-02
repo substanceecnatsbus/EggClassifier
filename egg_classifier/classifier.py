@@ -11,7 +11,7 @@ class Classifier:
 
     def __load_model(self, model_path: str) -> None:
         self.__model = tf.keras.models.load_model(
-            "resources/models/mobilenetv2")
+            model_path)
 
     def get_model(self) -> tf.keras.Model:
         return self.__model
