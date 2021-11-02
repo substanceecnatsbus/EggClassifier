@@ -3,7 +3,7 @@
 
 ## Installation
 ```
-python -m pip install -r requirements.txt
+python -m pip install .
 ```
 
 ## TODO
@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 - [] Implement ImageDrawer
 - [x] Create Tests for classifier.Classifier.load_dataset
 - [x] Implement classifier.Classifier.load_dataset
-- [] Create Tests for classifier.Classifier.train
+- [x] Create Tests for classifier.Classifier.train
 - [] Implement classifier.Classifier.train
 - [] Create Tests for classifier.Classifier.__load_model
 - [] Implement classifier.Classifier.__load_model

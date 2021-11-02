@@ -6,3 +6,5 @@ resources/raw-dataset
 resources/cropped-dataset
 .test.py
 EggClassifier.egg-info
+.output.txt
+resources/models
