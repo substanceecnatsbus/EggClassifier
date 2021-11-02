@@ -6,8 +6,8 @@ import tensorflow as tf
 from egg_classifier.classifier import Classifier
 
 DATASET_PATH = "resources/test-dataset/test-data"
-IMAGE_SIZE = (120, 120)
-INPUT_SHAPE = (120, 120, 3)
+IMAGE_SIZE = (128, 128)
+INPUT_SHAPE = (128, 128, 3)
 tf.autograph.set_verbosity(3)
 
 
@@ -37,11 +37,11 @@ class ClassifierTests(unittest.TestCase):
                          expected_number_of_images, "Number of images do not match.")
 
     def test_train(self) -> None:
-        model, history = Classifier.train(INPUT_SHAPE, number_of_epochs=1)
+        model, history = Classifier.train(INPUT_SHAPE, number_of_epochs=1, dataset_path="resources/test-dataset/test-data")
 
         # input shapes should match
         actual_input_shape = model.layers[0].output_shape
-        expected_input_shape = (None, 120, 120, 3)
+        expected_input_shape = (None, INPUT_SHAPE[0], INPUT_SHAPE[1], 3)
         self.assertEqual(*actual_input_shape,
                          expected_input_shape, "Invalid input shape.")
 
