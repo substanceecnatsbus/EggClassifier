@@ -15,14 +15,17 @@ python -m pip install .
 - [x] Implement ImageAugmentor
 - [] Create Tests for ImageDrawer
 - [] Implement ImageDrawer
-- [x] Create Tests for classifier.Classifier.load_dataset
-- [x] Implement classifier.Classifier.load_dataset
-- [x] Create Tests for classifier.Classifier.train
-- [x] Implement classifier.Classifier.train
-- [x] Create Tests for classifier.Classifier.__load_model
-- [x] Implement classifier.Classifier.__load_model
 - [x] Implement classifier.Classifier.__init__
+- [x] Create Tests for classifier.Classifier.__load_model
 - [] Create Tests for classifier.Classifier.predict
 - [] Implement classifier.Classifier.predict
+- [x] Create Tests for classifier.Mobilenetv2Classifier.load_dataset
+- [x] Implement classifier.Mobilenetv2Classifier.load_dataset
+- [x] Create Tests for classifier.Mobilenetv2Classifier.train
+- [x] Implement classifier.Mobilenetv2Classifier.train
+- [x] Create Tests for classifier.HistogramClassifier.load_dataset
+- [x] Implement classifier.HistogramClassifier.load_dataset
+- [x] Create Tests for classifier.HistogramClassifier.train
+- [x] Implement classifier.HistogramClassifier.train
 - [x] Create image_augmentation.py
 - [x] Create image_split.py

@@ -4,7 +4,8 @@ __pycache__
 resources/dataset
 resources/raw-dataset
 resources/cropped-dataset
+resources/models
+resources/test-dataset/test-models
 .test.py
 EggClassifier.egg-info
 .output.txt
-resources/models
