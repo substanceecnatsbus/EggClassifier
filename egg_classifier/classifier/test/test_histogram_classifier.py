@@ -5,7 +5,8 @@ from egg_classifier.classifier.histogram_classifier import HistogramClassifier
 
 tf.autograph.set_verbosity(3)
 DATASET_PATH = "resources/test-dataset/test-data"
-MODEL_PATH = "resources/test-dataset/test-model/histogram"
+ROOT_MODEL_PATH = "resources/test-dataset/test-models"
+MODEL_PATH = "resources/test-dataset/test-models/histogram"
 IMAGE_SIZE = (128, 128)
 
 
@@ -36,8 +37,12 @@ class HistogramClassifierTests(unittest.TestCase):
                          expected_number_of_images, "Number of images do not match.")
 
     def test_train(self) -> None:
+        if not os.path.exists(ROOT_MODEL_PATH):
+            os.mkdir(ROOT_MODEL_PATH)
+        if not os.path.exists(MODEL_PATH):
+            os.mkdir(MODEL_PATH)
         model, history = HistogramClassifier.train(
-            IMAGE_SIZE, number_of_epochs=1, dataset_path=DATASET_PATH, save_path=MODEL_PATH)
+            IMAGE_SIZE, number_of_epochs=1, dataset_path=DATASET_PATH)
 
         # input shapes should match
         actual_input_shape = model.layers[0].output_shape
@@ -52,6 +57,12 @@ class HistogramClassifierTests(unittest.TestCase):
                          expected_output_shape, "Invalid output shape.")
 
     def test_load_model(self) -> None:
+        if not os.path.exists(ROOT_MODEL_PATH):
+            os.mkdir(ROOT_MODEL_PATH)
+        if not os.path.exists(MODEL_PATH):
+            os.mkdir(MODEL_PATH)
+        model, history = HistogramClassifier.train(
+            IMAGE_SIZE, number_of_epochs=1, dataset_path=DATASET_PATH, save_path=MODEL_PATH)
         classifier = HistogramClassifier(MODEL_PATH)
         model = classifier.model
 

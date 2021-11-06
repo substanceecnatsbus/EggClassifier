@@ -6,7 +6,8 @@ from egg_classifier.test.test_image_processor import IMAGE_SPLITTER_INPUT_IMAGE_
 
 tf.autograph.set_verbosity(3)
 DATASET_PATH = "resources/test-dataset/test-data"
-MODEL_PATH = "resources/test-dataset/test-model/mobilenetv2"
+ROOT_MODEL_PATH = "resources/test-dataset/test-models"
+MODEL_PATH = "resources/test-dataset/test-models/mobilenetv2"
 IMAGE_SIZE = (128, 128)
 
 
@@ -36,9 +37,13 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
                          expected_number_of_images, "Number of images do not match.")
 
     def test_train(self) -> None:
+        if not os.path.exists(ROOT_MODEL_PATH):
+            os.mkdir(ROOT_MODEL_PATH)
+        if not os.path.exists(MODEL_PATH):
+            os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
             (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
-            dataset_path=DATASET_PATH, save_path=MODEL_PATH
+            dataset_path=DATASET_PATH
         )
 
         # input shapes should match
@@ -54,6 +59,14 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
                          expected_output_shape, "Invalid output shape.")
 
     def test_load_model(self) -> None:
+        if not os.path.exists(ROOT_MODEL_PATH):
+            os.mkdir(ROOT_MODEL_PATH)
+        if not os.path.exists(MODEL_PATH):
+            os.mkdir(MODEL_PATH)
+        model, history = Mobilenetv2Classifier.train(
+            (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
+            dataset_path=DATASET_PATH, save_path=MODEL_PATH
+        )
         classifier = Mobilenetv2Classifier(MODEL_PATH)
         model = classifier.model
 
