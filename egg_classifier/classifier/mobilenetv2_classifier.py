@@ -38,12 +38,12 @@ class Mobilenetv2Classifier(Classifier):
               save_path: str = "", number_of_epochs: int = 100,
               learning_rate: int = 0.0001, test_split: float = 0.1) -> Tuple[tf.keras.Model, Any]:
         base_model = tf.keras.applications.mobilenet_v2.MobileNetV2(
-            input_shape=image_size, include_top=False, weights='imagenet',
+            input_shape=(image_size[0], image_size[1], 3), include_top=False, weights='imagenet',
             input_tensor=None, pooling=None,
         )
         base_model.trainable = False
 
-        inputs = tf.keras.Input(shape=image_size)
+        inputs = tf.keras.Input(shape=(image_size[0], image_size[1], 3))
         x = tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
         x = base_model(x, training=False)
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
@@ -53,7 +53,7 @@ class Mobilenetv2Classifier(Classifier):
         model = tf.keras.Model(inputs, outputs)
 
         train_dataset, test_dataset, _ = Mobilenetv2Classifier.load_dataset(
-            dataset_path, (image_size[0], image_size[1]), test_split=test_split)
+            dataset_path, image_size, test_split=test_split)
 
         model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
                       loss=tf.keras.losses.BinaryCrossentropy(),

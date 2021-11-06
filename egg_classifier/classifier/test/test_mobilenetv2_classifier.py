@@ -42,7 +42,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
         if not os.path.exists(MODEL_PATH):
             os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
-            (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
+            IMAGE_SIZE, number_of_epochs=1,
             dataset_path=DATASET_PATH
         )
 
@@ -64,7 +64,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
         if not os.path.exists(MODEL_PATH):
             os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
-            (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
+            IMAGE_SIZE, number_of_epochs=1,
             dataset_path=DATASET_PATH, save_path=MODEL_PATH
         )
         classifier = Mobilenetv2Classifier(MODEL_PATH)
