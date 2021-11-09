@@ -1,9 +1,9 @@
 from typing import Tuple, Any
 import os
+import numpy as np
+from PIL import Image
 import tensorflow as tf
 from egg_classifier.classifier import Classifier
-from PIL import Image
-import numpy as np
 
 tf.autograph.set_verbosity(3)
 
@@ -90,3 +90,18 @@ class HistogramClassifier(Classifier):
         if save_path != "":
             model.save(save_path)
         return (model, history)
+
+    def predict(self, data: np.ndarray) -> list[int]:
+        number_of_images = data.shape[0]
+        histograms = []
+        for i in range(number_of_images):
+            image = data[i, :]
+            image = Image.fromarray(image)
+            image = image.resize(self.image_size)
+            histogram = image.histogram()
+            histograms.append(histogram)
+        inputs = np.array(histograms, dtype=np.float)
+        predictions = self.model.predict(histograms)
+        predictions = [1 if prediction >
+                       0.4 else 0 for prediction in predictions]
+        return predictions

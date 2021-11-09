@@ -1,4 +1,6 @@
 from typing import Tuple, Any
+import numpy as np
+from PIL import Image
 import tensorflow as tf
 from egg_classifier.classifier import Classifier
 
@@ -65,3 +67,18 @@ class Mobilenetv2Classifier(Classifier):
         if save_path != "":
             model.save(save_path)
         return (model, history)
+
+    def predict(self, data: np.ndarray) -> list[int]:
+        number_of_images = data.shape[0]
+        images = []
+        for i in range(number_of_images):
+            image = data[i, :]
+            image = Image.fromarray(image)
+            image = image.resize(self.image_size)
+            image = np.array(image)
+            images.append(image)
+        inputs = np.array(images)
+        predictions = self.model.predict(inputs)
+        predictions = [1 if prediction >
+                       0.4 else 0 for prediction in predictions]
+        return predictions
