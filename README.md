@@ -17,8 +17,10 @@ python -m pip install .
 - [] Implement ImageDrawer
 - [x] Implement classifier.Classifier.__init__
 - [x] Create Tests for classifier.Classifier.__load_model
-- [] Create Tests for classifier.Classifier.predict
-- [] Implement classifier.Classifier.predict
+- [x] Create Tests for classifier.HistogramClassifier.predict
+- [x] Implement classifier.HistogramClassifier.predict
+- [x] Create Tests for classifier.Mobilenetv2.Classifier.predict
+- [x] Implement classifier.Mobilenetv2Classifier.predict
 - [x] Create Tests for classifier.Mobilenetv2Classifier.load_dataset
 - [x] Implement classifier.Mobilenetv2Classifier.load_dataset
 - [x] Create Tests for classifier.Mobilenetv2Classifier.train
