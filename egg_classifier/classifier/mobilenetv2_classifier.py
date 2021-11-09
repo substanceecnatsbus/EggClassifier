@@ -1,4 +1,6 @@
 from typing import Tuple, Any
+import numpy as np
+from PIL import Image
 import tensorflow as tf
 from egg_classifier.classifier import Classifier
 
@@ -38,12 +40,12 @@ class Mobilenetv2Classifier(Classifier):
               save_path: str = "", number_of_epochs: int = 100,
               learning_rate: int = 0.0001, test_split: float = 0.1) -> Tuple[tf.keras.Model, Any]:
         base_model = tf.keras.applications.mobilenet_v2.MobileNetV2(
-            input_shape=image_size, include_top=False, weights='imagenet',
+            input_shape=(image_size[0], image_size[1], 3), include_top=False, weights='imagenet',
             input_tensor=None, pooling=None,
         )
         base_model.trainable = False
 
-        inputs = tf.keras.Input(shape=image_size)
+        inputs = tf.keras.Input(shape=(image_size[0], image_size[1], 3))
         x = tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
         x = base_model(x, training=False)
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
@@ -53,7 +55,7 @@ class Mobilenetv2Classifier(Classifier):
         model = tf.keras.Model(inputs, outputs)
 
         train_dataset, test_dataset, _ = Mobilenetv2Classifier.load_dataset(
-            dataset_path, (image_size[0], image_size[1]), test_split=test_split)
+            dataset_path, image_size, test_split=test_split)
 
         model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
                       loss=tf.keras.losses.BinaryCrossentropy(),
@@ -65,3 +67,18 @@ class Mobilenetv2Classifier(Classifier):
         if save_path != "":
             model.save(save_path)
         return (model, history)
+
+    def predict(self, data: np.ndarray) -> list[int]:
+        number_of_images = data.shape[0]
+        images = []
+        for i in range(number_of_images):
+            image = data[i, :]
+            image = Image.fromarray(image)
+            image = image.resize(self.image_size)
+            image = np.array(image)
+            images.append(image)
+        inputs = np.array(images)
+        predictions = self.model.predict(inputs)
+        predictions = [1 if prediction >
+                       0.4 else 0 for prediction in predictions]
+        return predictions

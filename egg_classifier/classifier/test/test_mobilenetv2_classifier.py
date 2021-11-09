@@ -1,13 +1,16 @@
 import unittest
 import os
+from PIL import Image
+import numpy as np
 import tensorflow as tf
 from egg_classifier.classifier.mobilenetv2_classifier import Mobilenetv2Classifier
-from egg_classifier.test.test_image_processor import IMAGE_SPLITTER_INPUT_IMAGE_PATH
+from egg_classifier.test.test_image_processor import ImageSplitter
 
 tf.autograph.set_verbosity(3)
 DATASET_PATH = "resources/test-dataset/test-data"
 ROOT_MODEL_PATH = "resources/test-dataset/test-models"
 MODEL_PATH = "resources/test-dataset/test-models/mobilenetv2"
+IMAGE_PATH = "resources/test-dataset/test-eggs.jpg"
 IMAGE_SIZE = (128, 128)
 
 
@@ -42,7 +45,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
         if not os.path.exists(MODEL_PATH):
             os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
-            (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
+            IMAGE_SIZE, number_of_epochs=1,
             dataset_path=DATASET_PATH
         )
 
@@ -64,7 +67,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
         if not os.path.exists(MODEL_PATH):
             os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
-            (IMAGE_SIZE[0], IMAGE_SIZE[1], 3), number_of_epochs=1,
+            IMAGE_SIZE, number_of_epochs=1,
             dataset_path=DATASET_PATH, save_path=MODEL_PATH
         )
         classifier = Mobilenetv2Classifier(MODEL_PATH)
@@ -81,6 +84,26 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
         expected_output_shape = (None, 1)
         self.assertEqual(actual_output_shape,
                          expected_output_shape, "Invalid output shape.")
+
+    def test_predict(self) -> None:
+        if not os.path.exists(ROOT_MODEL_PATH):
+            os.mkdir(ROOT_MODEL_PATH)
+        if not os.path.exists(MODEL_PATH):
+            os.mkdir(MODEL_PATH)
+        model, history = Mobilenetv2Classifier.train(
+            IMAGE_SIZE, number_of_epochs=1, dataset_path=DATASET_PATH, save_path=MODEL_PATH)
+        classifier = Mobilenetv2Classifier(MODEL_PATH)
+
+        with Image.open(IMAGE_PATH) as image:
+            image_ndarray = np.array(image)
+        image_splitter = ImageSplitter(4, 6)
+        images = image_splitter.split_image(image_ndarray)
+        expected_number_of_predictions = images.shape[0]
+
+        predictions = classifier.predict(images)
+        actual_number_of_predictions = len(predictions)
+        self.assertEqual(actual_number_of_predictions,
+                         expected_number_of_predictions, "Invalid number of predictions.")
 
 
 if __name__ == "__main__":
