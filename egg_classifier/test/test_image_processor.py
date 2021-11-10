@@ -1,14 +1,17 @@
 import unittest
+from typing import Dict
 from PIL import Image
 import numpy as np
-from egg_classifier.image_processor import ImageSplitter, flip_vertical, flip_horizontal
+from egg_classifier.image_processor import ImageSplitter, ImageDrawer, flip_vertical, flip_horizontal
 
 NUMBER_OF_ROWS: int = 4
 NUMBER_OF_COLUMNS: int = 6
+RADIUS: int = 5
+COLORS:  Dict[str, str] = dict([("fertile", "#00f"), ("infertile", "#f00")])
 OFFSET_X_PERCENT: int = -10
 OFFSET_Y_PERCENT: int = 0
-IMAGE_SPLITTER_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-eggs.jpg"
-IMAGE_AUGMENTATION_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-egg.jpg"
+SPLITTER_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-eggs.jpg"
+AUGMENTATION_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-egg.jpg"
 
 
 class ImageSplitterTests(unittest.TestCase):
@@ -24,17 +27,15 @@ class ImageSplitterTests(unittest.TestCase):
             image_splitter = ImageSplitter(
                 NUMBER_OF_ROWS, NUMBER_OF_COLUMNS, OFFSET_X_PERCENT, OFFSET_Y_PERCENT
             )
-            input_image = Image.open(IMAGE_SPLITTER_INPUT_IMAGE_PATH)
+            input_image = Image.open(SPLITTER_INPUT_IMAGE_PATH)
             input_image_ndarray = np.array(input_image, dtype=np.uint8)
             output_images = image_splitter.split_image(input_image_ndarray)
 
             # get input image properties
             input_image_width = input_image.width
             input_image_height = input_image.height
-            crop_width = int(input_image_width /
-                             image_splitter.number_of_columns)
-            crop_height = int(input_image_height /
-                              image_splitter.number_of_rows)
+            crop_width = input_image_width // image_splitter.number_of_columns
+            crop_height = input_image_height // image_splitter.number_of_rows
             actual_dimensions = output_images.shape
             offset_x = crop_width * image_splitter.offset_x_percent // 100
             offset_y = crop_height * image_splitter.offset_y_percent // 100
@@ -79,7 +80,7 @@ class ImageAugmentationTests(unittest.TestCase):
     def test_flip_vertical(self) -> None:
         input_image: Image.Image = None
         try:
-            input_image = Image.open(IMAGE_AUGMENTATION_INPUT_IMAGE_PATH)
+            input_image = Image.open(AUGMENTATION_INPUT_IMAGE_PATH)
             input_image_ndarray = np.array(input_image, np.uint8)
             input_image_shape = input_image_ndarray.shape
             actual_image = flip_vertical(input_image_ndarray)
@@ -105,7 +106,7 @@ class ImageAugmentationTests(unittest.TestCase):
     def test_flip_horizontal(self) -> None:
         input_image: Image.Image = None
         try:
-            input_image = Image.open(IMAGE_AUGMENTATION_INPUT_IMAGE_PATH)
+            input_image = Image.open(AUGMENTATION_INPUT_IMAGE_PATH)
             input_image_ndarray = np.array(input_image, np.uint8)
             input_image_shape = input_image_ndarray.shape
             actual_image = flip_horizontal(input_image_ndarray)
@@ -127,6 +128,17 @@ class ImageAugmentationTests(unittest.TestCase):
         finally:
             if input_image is not None:
                 input_image.close()
+
+
+class ImageDrawerTests(unittest.TestCase):
+    def test_constructor(self) -> None:
+        drawer = ImageDrawer(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS, RADIUS, COLORS)
+
+        self.assertEqual(drawer.number_of_rows,
+                         NUMBER_OF_ROWS, "Invalid number of rows")
+        self.assertEqual(drawer.number_of_columns,
+                         NUMBER_OF_COLUMNS, "Invalid number of columns")
+        self.assertEqual(drawer.radius,  RADIUS, "Invalid radius")
 
 
 if __name__ == "__main__":

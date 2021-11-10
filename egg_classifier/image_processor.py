@@ -1,3 +1,5 @@
+from typing import Dict
+from PIL import Image, ImageDraw
 import numpy as np
 
 
@@ -48,6 +50,36 @@ class ImageSplitter:
 
         result = np.stack(images)
         return result
+
+
+class ImageDrawer:
+    def __init__(self, number_of_rows: int, number_columns: int, radius: int, colors: Dict[str, str]) -> None:
+        self.number_of_rows = number_of_rows
+        self.number_of_columns = number_columns
+        self.radius = radius
+        self.colors = colors
+
+    def draw(self, image: Image.Image, labels: list[str]) -> Image.Image:
+        input_image_width = image.width
+        input_image_height = image.height
+        crop_width = input_image_width // self.number_of_columns
+        crop_height = input_image_height // self.number_of_rows
+
+        d = ImageDraw.Draw(image)
+        label_counter = 0
+        for y_start in range(0, crop_height * self.number_of_rows, crop_height):
+            y_end = y_start + crop_height
+            for x_start in range(0, crop_width * self.number_of_columns, crop_width):
+                label = labels[label_counter]
+                color = self.colors[label]
+                x_end = x_start + crop_width
+                center_y = y_start + (y_end - y_start) // 2
+                center_x = x_start + (x_end - x_start) // 2
+                d.ellipse([(center_x - self.radius, center_y - self.radius),
+                           (center_x + self.radius, center_y + self.radius)], color, 0)
+                label_counter += 1
+
+        return image
 
 
 def flip_vertical(input_image: np.ndarray) -> np.ndarray:
