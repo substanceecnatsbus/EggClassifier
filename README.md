@@ -13,8 +13,7 @@ python -m pip install .
 - [x] Implement ImageSplitter
 - [x] Create Tests for ImageAugmentor
 - [x] Implement ImageAugmentor
-- [] Create Tests for ImageDrawer
-- [] Implement ImageDrawer
+- [x]] Implement ImageDrawer
 - [x] Implement classifier.Classifier.__init__
 - [x] Create Tests for classifier.Classifier.__load_model
 - [x] Create Tests for classifier.HistogramClassifier.predict
