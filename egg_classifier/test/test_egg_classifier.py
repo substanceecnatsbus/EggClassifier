@@ -1,4 +1,5 @@
 import unittest
+import platform
 from PIL import Image
 import numpy as np
 from egg_classifier import ClassifierType, EggClassifier
@@ -13,7 +14,10 @@ COLORS = dict([
     ("fertile", "#0000ff"),
     ("infertile", "#ff0000")
 ])
+operating_system = platform.platform().split("-")[0].lower()
 FONT = "arial.ttf"
+if operating_system != "windows":
+    FONT = "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
 FONT_SIZE = 18
 CLASSIFIER_TYPE = ClassifierType.HISTOGRAM
 MODEL_PATH = "resources/test-dataset/test-models/histogram"
