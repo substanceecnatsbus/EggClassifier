@@ -16,7 +16,7 @@ COLORS = dict([
 FONT = "resources/fonts/Ubuntu-Regular.ttf"
 FONT_SIZE = 18
 CLASSIFIER_TYPE = ClassifierType.HISTOGRAM
-MODEL_PATH = "resources/models/histogram"
+MODEL_PATH = "resources/test-dataset/test-models/histogram"
 CLASSES = [
     "fertile",
     "infertile"
