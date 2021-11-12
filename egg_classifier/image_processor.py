@@ -1,5 +1,5 @@
 from typing import Dict
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 
@@ -53,17 +53,21 @@ class ImageSplitter:
 
 
 class ImageDrawer:
-    def __init__(self, number_of_rows: int, number_columns: int, radius: int, colors: Dict[str, str]) -> None:
+    def __init__(self, number_of_rows: int, number_columns: int, radius: int,
+                 colors: Dict[str, str], font, font_size) -> None:
         self.number_of_rows = number_of_rows
         self.number_of_columns = number_columns
         self.radius = radius
         self.colors = colors
+        self.font = font
+        self.font_size = font_size
 
     def draw(self, image: Image.Image, labels: list[str]) -> Image.Image:
         input_image_width = image.width
         input_image_height = image.height
         crop_width = input_image_width // self.number_of_columns
         crop_height = input_image_height // self.number_of_rows
+        font = ImageFont.truetype(self.font, self.font_size)
 
         d = ImageDraw.Draw(image)
         label_counter = 0
@@ -77,6 +81,8 @@ class ImageDrawer:
                 center_x = x_start + (x_end - x_start) // 2
                 d.ellipse([(center_x - self.radius, center_y - self.radius),
                            (center_x + self.radius, center_y + self.radius)], color, 0)
+                d.text((center_x - self.radius - self.font_size * 0.95, center_y -
+                       self.radius - self.font_size * 1.15), label, color, font=font)
                 label_counter += 1
 
         return image
