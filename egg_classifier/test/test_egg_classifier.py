@@ -13,7 +13,7 @@ COLORS = dict([
     ("fertile", "#0000ff"),
     ("infertile", "#ff0000")
 ])
-FONT = "arial.ttf"
+FONT = "resources/fonts/Ubuntu-Regular.ttf"
 FONT_SIZE = 18
 CLASSIFIER_TYPE = ClassifierType.HISTOGRAM
 MODEL_PATH = "resources/models/histogram"

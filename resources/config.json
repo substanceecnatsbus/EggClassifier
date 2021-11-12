@@ -8,7 +8,7 @@
         "fertile": "#0000ff",
         "infertile": "#ff0000"
     },
-    "font": "arial.ttf",
+    "font": "resources/fonts/Ubuntu-Regular.ttf",
     "font_size": 18,
     "classifier_type": "histogram",
     "model_path": "resources/models/histogram",
