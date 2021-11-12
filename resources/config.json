@@ -1,0 +1,24 @@
+{
+    "number_of_rows": 4,
+    "number_of_columns": 6,
+    "offset_x_percent": 0,
+    "offset_y_percent": 0,
+    "radius": 7,
+    "colors": {
+        "fertile": "#0000ff",
+        "infertile": "#ff0000"
+    },
+    "font": "resources/fonts/Ubuntu-Regular.ttf",
+    "font_size": 18,
+    "classifier_type": "histogram",
+    "model_path": "resources/models/histogram",
+    "classes": [
+        "fertile",
+        "infertile"
+    ],
+    "prediction_threshold": 0.4,
+    "image_size": [
+        128,
+        128
+    ]
+}

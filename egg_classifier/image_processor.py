@@ -54,7 +54,7 @@ class ImageSplitter:
 
 class ImageDrawer:
     def __init__(self, number_of_rows: int, number_columns: int, radius: int,
-                 colors: Dict[str, str], font, font_size) -> None:
+                 colors: Dict[str, str], font: str, font_size: int) -> None:
         self.number_of_rows = number_of_rows
         self.number_of_columns = number_columns
         self.radius = radius
@@ -62,7 +62,9 @@ class ImageDrawer:
         self.font = font
         self.font_size = font_size
 
-    def draw(self, image: Image.Image, labels: list[str]) -> Image.Image:
+    def draw(self, image_np: np.ndarray, labels: list[str]) -> np.ndarray:
+        assert self.number_of_rows * self.number_of_columns == len(labels)
+        image = Image.fromarray(image_np)
         input_image_width = image.width
         input_image_height = image.height
         crop_width = input_image_width // self.number_of_columns
@@ -85,7 +87,7 @@ class ImageDrawer:
                        self.radius - self.font_size * 1.15), label, color, font=font)
                 label_counter += 1
 
-        return image
+        return np.array(image)
 
 
 def flip_vertical(input_image: np.ndarray) -> np.ndarray:
