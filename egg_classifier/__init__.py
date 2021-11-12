@@ -1,13 +1,20 @@
 from enum import Enum, auto
+from types import SimpleNamespace
 from typing import Dict, Tuple
+import time
+from tkinter import *
+from tkinter import ttk
+from tkinter.filedialog import askopenfilename
 import numpy as np
 import tensorflow as tf
+from PIL import Image, ImageTk
 from egg_classifier.image_processor import ImageSplitter, ImageDrawer
 from egg_classifier.classifier import Classifier
 from egg_classifier.classifier.mobilenetv2_classifier import Mobilenetv2Classifier
 from egg_classifier.classifier.histogram_classifier import HistogramClassifier
 
 tf.autograph.set_verbosity(0)
+
 
 class ClassifierType(Enum):
     MOBILENETV2 = auto()
@@ -44,3 +51,57 @@ class EggClassifier():
                   self.__prediction_threshold else self.__classes[1] for x in outputs]
         output_image = self.__image_drawer.draw(image_np, labels)
         return output_image
+
+
+class EggClassifierUI():
+    def __init__(self, classifier: EggClassifier, image_size: Tuple[int, int]):
+        self.__classifier = classifier
+        self.__image_size = image_size
+        self.__image_tk = None
+        self.__initialize()
+
+    def __initialize(self):
+        self.__root = Tk()
+        self.__root.title("Egg Classifier")
+        self.__root.resizable(False, False)
+        self.__master = ttk.Frame(self.__root)
+        self.__master.grid(row=0, column=0, padx=8, pady=4)
+        file_button = ttk.Button(
+            self.__master,
+            text="Browse",
+            command=self.__load_file
+        )
+        file_button.grid(row=1, column=0, sticky=(N, W, E, S))
+
+        capture_button = ttk.Button(
+            self.__master,
+            text="Capture"
+        )
+        capture_button.grid(row=1, column=1, sticky=(N, W, E, S))
+
+        self.__canvas = Canvas(
+            self.__master, width=self.__image_size[0], height=self.__image_size[1])
+        self.__canvas.grid(row=0, column=0, columnspan=2, sticky=(N, W, E, S))
+
+    def __load_file(self) -> None:
+        file_name = askopenfilename(
+            filetypes=[("Image", "*.jpg;*.jpeg;*.png")])
+        start_time = time.time()
+        self.__predict(file_name)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Execution Time: {execution_time} seconds")
+
+    def __predict(self, file_name: str) -> Tuple[Image.Image, float]:
+        with Image.open(file_name) as image:
+            image_np = np.array(image)
+        output_image_np = self.__classifier.predict(image_np)
+        output_image = Image.fromarray(output_image_np)
+        output_image = output_image.resize(self.__image_size)
+
+        self.__image_tk = ImageTk.PhotoImage(output_image)
+        image_label = ttk.Label(self.__canvas, image=self.__image_tk)
+        image_label.grid(row=0, column=0, sticky=(N, W, E, S))
+
+    def run(self) -> None:
+        self.__root.mainloop()
