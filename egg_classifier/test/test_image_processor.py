@@ -12,6 +12,8 @@ OFFSET_X_PERCENT: int = -10
 OFFSET_Y_PERCENT: int = 0
 SPLITTER_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-eggs.jpg"
 AUGMENTATION_INPUT_IMAGE_PATH: str = "./resources/test-dataset/test-egg.jpg"
+FONT: str = "arial.ttf"
+FONT_SIZE: int = 20
 
 
 class ImageSplitterTests(unittest.TestCase):
@@ -132,13 +134,16 @@ class ImageAugmentationTests(unittest.TestCase):
 
 class ImageDrawerTests(unittest.TestCase):
     def test_constructor(self) -> None:
-        drawer = ImageDrawer(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS, RADIUS, COLORS)
+        drawer = ImageDrawer(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS,
+                             RADIUS, COLORS, FONT, FONT_SIZE)
 
         self.assertEqual(drawer.number_of_rows,
                          NUMBER_OF_ROWS, "Invalid number of rows")
         self.assertEqual(drawer.number_of_columns,
                          NUMBER_OF_COLUMNS, "Invalid number of columns")
         self.assertEqual(drawer.radius,  RADIUS, "Invalid radius")
+        self.assertEqual(drawer.font,  FONT, "Invalid font")
+        self.assertEqual(drawer.font_size,  FONT_SIZE, "Invalid font size")
 
 
 if __name__ == "__main__":

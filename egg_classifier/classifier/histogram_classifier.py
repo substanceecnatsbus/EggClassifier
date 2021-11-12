@@ -101,7 +101,7 @@ class HistogramClassifier(Classifier):
             histogram = image.histogram()
             histograms.append(histogram)
         inputs = np.array(histograms, dtype=np.float)
-        predictions = self.model.predict(histograms)
+        predictions = self.model.predict(inputs)
         predictions = [1 if prediction >
                        0.4 else 0 for prediction in predictions]
         return predictions
