@@ -9,11 +9,11 @@ python -m pip install .
 ## TODO
 - [] \(Optional) Documentation
 - [] \(Optional) Docstrings
-- [x] Create Tests for ImageSplitter
-- [x] Implement ImageSplitter
-- [x] Create Tests for ImageAugmentor
-- [x] Implement ImageAugmentor
-- [x]] Implement ImageDrawer
+- [x] Create Tests for image_processor.ImageSplitter
+- [x] Implement image_processor.ImageSplitter
+- [x] Create Tests for image_processor.ImageAugmentor
+- [x] Implement image_processor.ImageAugmentor
+- [x] Implement image_processor.ImageDrawer
 - [x] Implement classifier.Classifier.__init__
 - [x] Create Tests for classifier.Classifier.__load_model
 - [x] Create Tests for classifier.HistogramClassifier.predict
@@ -28,5 +28,6 @@ python -m pip install .
 - [x] Implement classifier.HistogramClassifier.load_dataset
 - [x] Create Tests for classifier.HistogramClassifier.train
 - [x] Implement classifier.HistogramClassifier.train
-- [x] Create image_augmentation.py
-- [x] Create image_split.py
+- [x] Create image_processor.image_augmentation.py
+- [x] Create image_processor.image_split.py
+- [x] Create egg_classifier.EggClassifier
