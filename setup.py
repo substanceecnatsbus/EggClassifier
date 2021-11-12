@@ -9,6 +9,6 @@ setup(
     name="EggClassifier",
     version='1.0',
     description="Classifer for images of fertile and infertile eggs.",
-    packages=["egg_classifier"],
+    packages=["egg_classifier", "egg_classifier.classifier"],
     install_requires=DEPENDENCIES
 )
