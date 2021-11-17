@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from types import SimpleNamespace
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 import time
 from tkinter import *
 from tkinter import ttk
@@ -26,7 +26,7 @@ class EggClassifier():
                  offset_x_percent: int, offset_y_percent: int,
                  radius: int, colors: Dict[str, str], font: str,
                  font_size: int, classifier_type: ClassifierType, model_path: str,
-                 classes: list[str], prediction_threshold: float,
+                 classes: List[str], prediction_threshold: float,
                  image_size: Tuple[int, int] = (128, 128)) -> None:
         assert len(classes) == 2
         assert prediction_threshold >= 0 and prediction_threshold <= 1

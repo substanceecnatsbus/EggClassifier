@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Tuple
+from typing import Tuple, List
 import tensorflow as tf
 from abc import ABC, abstractmethod
 
@@ -20,7 +20,7 @@ class Classifier(ABC):
         self.__model = tf.keras.models.load_model(model_path)
 
     @abstractmethod
-    def predict(self, data: np.ndarray) -> list[int]:
+    def predict(self, data: np.ndarray) -> List[int]:
         pass
 
     @property

@@ -1,4 +1,4 @@
-from typing import Tuple, Any
+from typing import Tuple, Any, List
 import os
 import numpy as np
 from PIL import Image
@@ -15,7 +15,7 @@ class HistogramClassifier(Classifier):
                      batch_size: int = 16, test_split: float = 0.1,
                      seed: int = 123) -> Tuple[Tuple[np.ndarray, np.ndarray],
                                                Tuple[np.ndarray, np.ndarray],
-                                               list[str]]:
+                                               List[str]]:
         if test_split >= 1:
             raise Exception("test_split must be less than 1")
 
@@ -91,7 +91,7 @@ class HistogramClassifier(Classifier):
             model.save(save_path)
         return (model, history)
 
-    def predict(self, data: np.ndarray) -> list[int]:
+    def predict(self, data: np.ndarray) -> List[int]:
         number_of_images = data.shape[0]
         histograms = []
         for i in range(number_of_images):

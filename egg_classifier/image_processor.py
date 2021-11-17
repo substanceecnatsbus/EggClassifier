@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
@@ -62,7 +62,7 @@ class ImageDrawer:
         self.font = font
         self.font_size = font_size
 
-    def draw(self, image_np: np.ndarray, labels: list[str]) -> np.ndarray:
+    def draw(self, image_np: np.ndarray, labels: List[str]) -> np.ndarray:
         assert self.number_of_rows * self.number_of_columns == len(labels)
         image = Image.fromarray(image_np)
         input_image_width = image.width
