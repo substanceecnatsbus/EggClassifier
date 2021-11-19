@@ -32,4 +32,4 @@ python -m pip install .
 - [x] Create image_processor.image_split.py
 - [x] Create egg_classifier.EggClassifier
 - [x] Create egg_classifier.EggClassifierUI
-- [] Create egg_classifier.EggClassifierUI.capture
+- [x] Create egg_classifier.EggClassifierUI.capture
