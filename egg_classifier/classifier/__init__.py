@@ -8,13 +8,21 @@ tf.autograph.set_verbosity(3)
 
 class Classifier(ABC):
 
+    def __init__(self, image_size: Tuple[int, int] = ...) -> None:
+        self.__image_size = image_size
+
+    @property
+    def image_size(self):
+        return self.__image_size
+
+    @property
+    @abstractmethod
+    def model(self) -> tf.keras.Model:
+        pass
+
     @abstractmethod
     def predict(self, data: np.ndarray) -> List[int]:
         pass
-
-    @property
-    def model(self) -> tf.keras.Model:
-        return self.__model
 
     @staticmethod
     @abstractmethod

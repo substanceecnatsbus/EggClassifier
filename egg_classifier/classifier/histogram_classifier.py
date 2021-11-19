@@ -3,24 +3,36 @@ import os
 import numpy as np
 from PIL import Image
 import tensorflow as tf
+from egg_classifier import Classifier
 
 tf.autograph.set_verbosity(3)
 
 
-class HistogramClassifier():
+class HistogramClassifier(Classifier):
 
-    def __init__(self, model_path: str, image_size: Tuple[int, int] = ...) -> None:
-        self.__image_size = image_size
+    def __init__(self, model_path: str, image_size: Tuple[int, int] = (128, 128)) -> None:
+        super().__init__(image_size=image_size)
         self.__model = HistogramClassifier.create_model()
         self.__model.load_weights(model_path).expect_partial()
 
     @property
-    def image_size(self):
-        return self.__image_size
-
-    @property
     def model(self) -> tf.keras.Model:
         return self.__model
+
+    def predict(self, data: np.ndarray) -> List[int]:
+        number_of_images = data.shape[0]
+        histograms = []
+        for i in range(number_of_images):
+            image = data[i, :]
+            image = Image.fromarray(image)
+            image = image.resize(self.image_size)
+            histogram = image.histogram()
+            histograms.append(histogram)
+        inputs = np.array(histograms, dtype=np.float)
+        predictions = self.model.predict(inputs)
+        predictions = [1 if prediction >
+                       0.4 else 0 for prediction in predictions]
+        return predictions
 
     @staticmethod
     def load_dataset(dataset_path: str, image_size: Tuple,
@@ -97,20 +109,5 @@ class HistogramClassifier():
                             validation_data=(test_data, test_labels))
 
         if save_path != "":
-            model.save_weights(f"{save_path}")
+            model.save_weights(save_path)
         return (model, history)
-
-    def predict(self, data: np.ndarray) -> List[int]:
-        number_of_images = data.shape[0]
-        histograms = []
-        for i in range(number_of_images):
-            image = data[i, :]
-            image = Image.fromarray(image)
-            image = image.resize(self.image_size)
-            histogram = image.histogram()
-            histograms.append(histogram)
-        inputs = np.array(histograms, dtype=np.float)
-        predictions = self.model.predict(inputs)
-        predictions = [1 if prediction >
-                       0.4 else 0 for prediction in predictions]
-        return predictions

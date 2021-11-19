@@ -24,7 +24,7 @@ def initialize() -> EggClassifierUI:
         config["image_size"]
     )
 
-    ui = EggClassifierUI(classifier, config["image_size_ui"])
+    ui = EggClassifierUI(classifier, config["image_size_ui"], config["temp_path"])
     return ui
 
 
