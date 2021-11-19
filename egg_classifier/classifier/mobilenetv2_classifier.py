@@ -9,6 +9,30 @@ tf.autograph.set_verbosity(3)
 
 class Mobilenetv2Classifier(Classifier):
 
+    def __init__(self, model_path: str, model: tf.keras.Model, image_size: Tuple[int, int] = (128, 128), ) -> None:
+        super().__init__(image_size=image_size)
+        self.__model = model
+        self.__model.load_weights(model_path).expect_partial()
+
+    @property
+    def model(self) -> tf.keras.Model:
+        return self.__model
+
+    def predict(self, data: np.ndarray) -> List[int]:
+        number_of_images = data.shape[0]
+        images = []
+        for i in range(number_of_images):
+            image = data[i, :]
+            image = Image.fromarray(image)
+            image = image.resize(self.image_size)
+            image = np.array(image)
+            images.append(image)
+        inputs = np.array(images)
+        predictions = self.model.predict(inputs)
+        predictions = [1 if prediction >
+                       0.4 else 0 for prediction in predictions]
+        return predictions
+
     @staticmethod
     def load_dataset(dataset_path: str, image_size: Tuple,
                      batch_size: int = 16, test_split: float = 0.1,
@@ -65,20 +89,5 @@ class Mobilenetv2Classifier(Classifier):
                             validation_data=test_dataset)
 
         if save_path != "":
-            model.save(save_path)
+            model.save_weights(save_path)
         return (model, history)
-
-    def predict(self, data: np.ndarray) -> List[int]:
-        number_of_images = data.shape[0]
-        images = []
-        for i in range(number_of_images):
-            image = data[i, :]
-            image = Image.fromarray(image)
-            image = image.resize(self.image_size)
-            image = np.array(image)
-            images.append(image)
-        inputs = np.array(images)
-        predictions = self.model.predict(inputs)
-        predictions = [1 if prediction >
-                       0.4 else 0 for prediction in predictions]
-        return predictions

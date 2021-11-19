@@ -70,7 +70,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
             IMAGE_SIZE, number_of_epochs=1,
             dataset_path=DATASET_PATH, save_path=MODEL_PATH
         )
-        classifier = Mobilenetv2Classifier(MODEL_PATH)
+        classifier = Mobilenetv2Classifier(MODEL_PATH, model, IMAGE_SIZE)
         model = classifier.model
 
         # input shapes should match
@@ -92,7 +92,7 @@ class MobilenetV2ClassifierTests(unittest.TestCase):
             os.mkdir(MODEL_PATH)
         model, history = Mobilenetv2Classifier.train(
             IMAGE_SIZE, number_of_epochs=1, dataset_path=DATASET_PATH, save_path=MODEL_PATH)
-        classifier = Mobilenetv2Classifier(MODEL_PATH)
+        classifier = Mobilenetv2Classifier(MODEL_PATH, model, IMAGE_SIZE)
 
         with Image.open(IMAGE_PATH) as image:
             image_ndarray = np.array(image)

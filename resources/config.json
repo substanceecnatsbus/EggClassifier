@@ -24,5 +24,6 @@
     "image_size_ui": [
         640,
         480
-    ]
+    ],
+    "temp_path": "resources/temp/1.jpg"
 }

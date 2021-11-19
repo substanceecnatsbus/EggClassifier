@@ -1,7 +1,8 @@
 from enum import Enum, auto
-from types import SimpleNamespace
 from typing import Dict, Tuple, List
 import time
+import subprocess
+import platform
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename
@@ -40,6 +41,7 @@ class EggClassifier():
         self.__prediction_threshold = prediction_threshold
         self.__classifier: Classifier = None
         if classifier_type == ClassifierType.MOBILENETV2:
+            raise Exception("Mobilenetv2 is depreciated")
             self.__classifier = Mobilenetv2Classifier(model_path, image_size)
         else:
             self.__classifier = HistogramClassifier(model_path, image_size)
@@ -54,9 +56,10 @@ class EggClassifier():
 
 
 class EggClassifierUI():
-    def __init__(self, classifier: EggClassifier, image_size: Tuple[int, int]):
+    def __init__(self, classifier: EggClassifier, image_size: Tuple[int, int], temp_path: str):
         self.__classifier = classifier
         self.__image_size = image_size
+        self.__temp_path = temp_path
         self.__image_tk = None
         self.__initialize()
 
@@ -75,7 +78,8 @@ class EggClassifierUI():
 
         capture_button = ttk.Button(
             self.__master,
-            text="Capture"
+            text="Capture",
+            command=self.__capture
         )
         capture_button.grid(row=1, column=1, sticky=(N, W, E, S))
 
@@ -88,6 +92,29 @@ class EggClassifierUI():
             filetypes=[("Image", "*.jpg;*.jpeg;*.png")])
         start_time = time.time()
         self.__predict(file_name)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Execution Time: {execution_time} seconds")
+
+    def __capture(self) -> None:
+        if platform.system() == "Windows":
+            return
+        subprocess.run([
+            "gst-launch-1.0",
+            "nvarguscamerasrc",
+            "num-buffers=1",
+            "!",
+            "nvvidconv",
+            "!",
+            "video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=I420",
+            "!",
+            "nvjpegenc",
+            "!",
+            "filesink",
+            f"location={self.__temp_path}"
+        ])
+        start_time = time.time()
+        self.__predict(self.__temp_path)
         end_time = time.time()
         execution_time = end_time - start_time
         print(f"Execution Time: {execution_time} seconds")
