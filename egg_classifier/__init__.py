@@ -62,6 +62,7 @@ class EggClassifierUI():
         self.__image_size = image_size
         self.__temp_path = temp_path
         self.__image_tk = None
+        self.__delete_images()
         self.__initialize()
 
     def __initialize(self):
@@ -104,20 +105,17 @@ class EggClassifierUI():
             "nvgstcapture-1.0",
             "--automate",
             "--capture-auto"
-            "--file-name",
-            f"{self.__temp_path}/1.jpg"
         ])
-        files = os.listdir(self.__temp_path)
-        if len(files) < 1:
-            print("temp directory is empty")
+        image_path = self.__get_image_path()
+        if image_path is None:
+            print("no captured image found")
             return
-        image_path = f"{self.__temp_path}/{files[0]}"
         start_time = time.time()
         self.__predict(image_path)
         end_time = time.time()
         execution_time = end_time - start_time
         print(f"Execution Time: {execution_time} seconds")
-        self.empty_temp_directory()
+        self.__delete_images()
 
     def __predict(self, file_name: str) -> Tuple[Image.Image, float]:
         with Image.open(file_name) as image:
@@ -130,10 +128,16 @@ class EggClassifierUI():
         image_label = ttk.Label(self.__canvas, image=self.__image_tk)
         image_label.grid(row=0, column=0, sticky=(N, W, E, S))
 
-    def empty_temp_directory(self) -> None:
-        for file_name in os.listdir(self.__temp_path):
-            file_path = f"{self.__temp_path}/{file_name}"
-            os.remove(file_path)
+    def __delete_images(self) -> None:
+        for file_name in os.listdir():
+            if file_name.split(".")[-1] == "jpg":
+                os.remove(file_name)
+
+    def __get_image_path(self) -> str:
+        for file_name in os.listdir():
+            if file_name.split(".")[-1] == "jpg":
+                return file_name
+        return None
 
     def run(self) -> None:
         self.__root.mainloop()
