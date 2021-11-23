@@ -1,3 +1,4 @@
+import os
 from enum import Enum, auto
 from typing import Dict, Tuple, List
 import time
@@ -100,24 +101,23 @@ class EggClassifierUI():
         if platform.system() == "Windows":
             return
         subprocess.run([
-            "gst-launch-1.0",
-            "nvarguscamerasrc",
-            "num-buffers=1",
-            "!",
-            "nvvidconv",
-            "!",
-            "video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=I420",
-            "!",
-            "nvjpegenc",
-            "!",
-            "filesink",
-            f"location={self.__temp_path}"
+            "nvgstcapture-1.0",
+            "--automate",
+            "--capture-auto"
+            "--file-name",
+            f"{self.__temp_path}/1.jpg"
         ])
+        files = os.listdir(self.__temp_path)
+        if len(files) < 1:
+            print("temp directory is empty")
+            return
+        image_path = f"{self.__temp_path}/{files[0]}"
         start_time = time.time()
-        self.__predict(self.__temp_path)
+        self.__predict(image_path)
         end_time = time.time()
         execution_time = end_time - start_time
         print(f"Execution Time: {execution_time} seconds")
+        self.empty_temp_directory()
 
     def __predict(self, file_name: str) -> Tuple[Image.Image, float]:
         with Image.open(file_name) as image:
@@ -129,6 +129,11 @@ class EggClassifierUI():
         self.__image_tk = ImageTk.PhotoImage(output_image)
         image_label = ttk.Label(self.__canvas, image=self.__image_tk)
         image_label.grid(row=0, column=0, sticky=(N, W, E, S))
+
+    def empty_temp_directory(self) -> None:
+        for file_name in os.listdir(self.__temp_path):
+            file_path = f"{self.__temp_path}/{file_name}"
+            os.remove(file_path)
 
     def run(self) -> None:
         self.__root.mainloop()
