@@ -42,7 +42,6 @@ class EggClassifier():
         self.__prediction_threshold = prediction_threshold
         self.__classifier: Classifier = None
         if classifier_type == ClassifierType.MOBILENETV2:
-            raise Exception("Mobilenetv2 is depreciated")
             self.__classifier = Mobilenetv2Classifier(model_path, image_size)
         else:
             self.__classifier = HistogramClassifier(model_path, image_size)

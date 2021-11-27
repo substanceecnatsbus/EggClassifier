@@ -10,8 +10,8 @@
     },
     "font": "resources/fonts/Ubuntu-Regular.ttf",
     "font_size": 18,
-    "classifier_type": "histogram",
-    "model_path": "resources/models/histogram",
+    "classifier_type": "mobilenetv2",
+    "model_path": "resources/models/mobilenetv2",
     "classes": [
         "fertile",
         "infertile"

@@ -9,9 +9,9 @@ tf.autograph.set_verbosity(3)
 
 class Mobilenetv2Classifier(Classifier):
 
-    def __init__(self, model_path: str, model: tf.keras.Model, image_size: Tuple[int, int] = (128, 128), ) -> None:
+    def __init__(self, model_path: str, image_size: Tuple[int, int] = (128, 128), ) -> None:
         super().__init__(image_size=image_size)
-        self.__model = model
+        self.__model = Mobilenetv2Classifier.create_model(image_size)
         self.__model.load_weights(model_path).expect_partial()
 
     @property
@@ -60,9 +60,7 @@ class Mobilenetv2Classifier(Classifier):
         return train_dataset, test_dataset, class_names
 
     @staticmethod
-    def train(image_size: Tuple, dataset_path: str,
-              save_path: str = "", number_of_epochs: int = 100,
-              learning_rate: int = 0.0001, test_split: float = 0.1) -> Tuple[tf.keras.Model, Any]:
+    def create_model(image_size: Tuple) -> Tuple[tf.keras.Model, Any]:
         base_model = tf.keras.applications.mobilenet_v2.MobileNetV2(
             input_shape=(image_size[0], image_size[1], 3), include_top=False, weights='imagenet',
             input_tensor=None, pooling=None,
@@ -77,6 +75,13 @@ class Mobilenetv2Classifier(Classifier):
         outputs = tf.keras.layers.Dense(
             1, activation=tf.keras.activations.sigmoid)(x)
         model = tf.keras.Model(inputs, outputs)
+        return model
+
+    @staticmethod
+    def train(image_size: Tuple, dataset_path: str,
+              save_path: str = "", number_of_epochs: int = 100,
+              learning_rate: int = 0.0001, test_split: float = 0.1) -> Tuple[tf.keras.Model, Any]:
+        model = Mobilenetv2Classifier.create_model(image_size)
 
         train_dataset, test_dataset, _ = Mobilenetv2Classifier.load_dataset(
             dataset_path, image_size, test_split=test_split)
