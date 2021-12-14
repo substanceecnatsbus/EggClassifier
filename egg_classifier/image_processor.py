@@ -53,11 +53,11 @@ class ImageSplitter:
 
 
 class ImageDrawer:
-    def __init__(self, number_of_rows: int, number_columns: int, radius: int,
+    def __init__(self, number_of_rows: int, number_columns: int, width: int,
                  colors: Dict[str, str], font: str, font_size: int) -> None:
         self.number_of_rows = number_of_rows
         self.number_of_columns = number_columns
-        self.radius = radius
+        self.width = width
         self.colors = colors
         self.font = font
         self.font_size = font_size
@@ -81,10 +81,18 @@ class ImageDrawer:
                 x_end = x_start + crop_width
                 center_y = y_start + (y_end - y_start) // 2
                 center_x = x_start + (x_end - x_start) // 2
-                d.ellipse([(center_x - self.radius, center_y - self.radius),
-                           (center_x + self.radius, center_y + self.radius)], color, 0)
-                d.text((center_x - self.radius - self.font_size * 0.95, center_y -
-                       self.radius - self.font_size * 1.15), label, color, font=font)
+                if(label == "fertile"):
+                    d.line([(center_x - self.width * 2.5, center_y - self.width * 2),
+                           (center_x - self.width * 0.5, center_y + self.width)], color, self.width)
+                    d.line([(center_x - self.width * 0.5, center_y + self.width),
+                           (center_x + self.width * 4.5, center_y - self.width * 2)], color, self.width)
+                else:
+                    d.line([(center_x - self.width * 2, center_y - self.width * 3),
+                           (center_x + self.width * 2, center_y + self.width * 3)], color, self.width)
+                    d.line([(center_x + self.width * 2, center_y - self.width * 3),
+                           (center_x - self.width * 2, center_y + self.width * 3)], color, self.width)
+                d.text((center_x - self.width - self.font_size * 0.95, center_y -
+                       self.width - self.font_size * 2), label, color, font=font)
                 label_counter += 1
 
         return np.array(image)

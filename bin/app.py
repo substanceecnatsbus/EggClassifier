@@ -18,13 +18,13 @@ def initialize() -> EggClassifierUI:
     classifier = EggClassifier(
         config["number_of_rows"], config["number_of_columns"],
         config["offset_x_percent"], config["offset_y_percent"],
-        config["radius"], config["colors"], config["font"],
+        config["width"], config["colors"], config["font"],
         config["font_size"], classifier_type, config["model_path"],
         config["classes"], config["prediction_threshold"],
         config["image_size"]
     )
 
-    ui = EggClassifierUI(classifier, config["image_size_ui"], config["temp_path"])
+    ui = EggClassifierUI(classifier, config["image_size_ui"])
     return ui
 
 
