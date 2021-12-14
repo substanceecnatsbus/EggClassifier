@@ -141,7 +141,7 @@ class ImageDrawerTests(unittest.TestCase):
                          NUMBER_OF_ROWS, "Invalid number of rows")
         self.assertEqual(drawer.number_of_columns,
                          NUMBER_OF_COLUMNS, "Invalid number of columns")
-        self.assertEqual(drawer.radius,  RADIUS, "Invalid radius")
+        self.assertEqual(drawer.width,  RADIUS, "Invalid radius")
         self.assertEqual(drawer.font,  FONT, "Invalid font")
         self.assertEqual(drawer.font_size,  FONT_SIZE, "Invalid font size")
 

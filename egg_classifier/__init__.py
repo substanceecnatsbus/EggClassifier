@@ -56,10 +56,9 @@ class EggClassifier():
 
 
 class EggClassifierUI():
-    def __init__(self, classifier: EggClassifier, image_size: Tuple[int, int], temp_path: str):
+    def __init__(self, classifier: EggClassifier, image_size: Tuple[int, int]):
         self.__classifier = classifier
         self.__image_size = image_size
-        self.__temp_path = temp_path
         self.__image_tk = None
         self.__delete_images()
         self.__initialize()
